@@ -1,6 +1,0 @@
-@TradeControl_HostAddress = http://localhost:5118
-
-GET {{TradeControl_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

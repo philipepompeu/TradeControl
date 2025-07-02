@@ -1,0 +1,15 @@
+﻿services:
+    postgres:
+        image: postgres:15
+        container_name: tradecontrol-db
+        restart: always
+        environment:
+          POSTGRES_USER: tradecontrol
+          POSTGRES_PASSWORD: tradecontrol
+          POSTGRES_DB: tradecontrol
+        volumes:
+          - tradecontrolpg_data:/var/lib/postgresql/data
+        ports:
+          - "5433:5432"    
+volumes:
+  tradecontrolpg_data:
