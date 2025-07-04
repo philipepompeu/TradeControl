@@ -18,7 +18,11 @@ builder.Services.AddScoped<IAssetsService, AssetsService>();
 
 var app = builder.Build();
 
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<TradeControlDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
