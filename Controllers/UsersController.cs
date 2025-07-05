@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using TradeControl.Dtos;
+using TradeControl.Services;
 
 namespace TradeControl.Controllers
 {
@@ -7,19 +10,35 @@ namespace TradeControl.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IUserService _userService;
+
+        public UsersController(IUserService userService) 
+        { 
+            _userService = userService;
+        }
 
         [HttpGet("{id}")]
-        public IActionResult GetUserPosition(Guid id)
+        public async Task<ActionResult<UserPositionView>> GetUserPositionAsync(Guid id)
         {
-            // Retorna posição consolidada do usuário
-            throw new NotImplementedException();
+            UserPositionView userPosition = await _userService.GetUserPositionAsync(id);
+
+            if(userPosition == null)
+                return NotFound(id);
+
+            return Ok(userPosition);// Retorna posição consolidada do usuário
+            
         }
 
         [HttpGet("{id}/average-price")]
-        public IActionResult GetAveragePrice(Guid id, [FromQuery] string[] tickers)
+        public async Task<ActionResult<List<AssetPositionView>>> GetAveragePrice(Guid id, [FromQuery] string[] tickers)
         {
-            // Retorna preço médio dos ativos informados
-            throw new NotImplementedException();
+
+            List<AssetPositionView> assets = await _userService.GetAveragePriceForTickers(id, tickers);
+
+            if(assets == null)
+                return NotFound(id);
+
+            return Ok(assets);            
         }
     }
 }

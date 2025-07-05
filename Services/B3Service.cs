@@ -13,19 +13,30 @@ namespace TradeControl.Services{
         }
         public async Task<AssetPriceView> ObterCotacaoAsync(string ticker)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"https://b3api.vercel.app/api/Assets/{ticker}");
-
-            response.EnsureSuccessStatusCode();
-
-            string conteudo = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Resposta da B3: {conteudo}");
-
-            AssetPriceView dto = JsonSerializer.Deserialize<AssetPriceView>(conteudo, new JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true
-            });
+                HttpResponseMessage response = await _httpClient.GetAsync($"https://b3api.vercel.app/api/Assets/{ticker}");
 
-            return dto;
+                response.EnsureSuccessStatusCode();
+
+                string conteudo = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Resposta da B3: {conteudo}");
+
+                AssetPriceView dto = JsonSerializer.Deserialize<AssetPriceView>(conteudo, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return dto;
+
+            }
+            catch (Exception ex)
+            {
+                // Loga o erro
+                Console.WriteLine($"Erro ao consultar B3: {ex.Message}");
+
+                return null; // Ou DTO indicando falha
+            }
         }
     }
 }
