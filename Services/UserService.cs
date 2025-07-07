@@ -25,7 +25,7 @@ namespace TradeControl.Services
             var user = await _userRepository.GetByIdAsync(id);
 
             if (user == null)
-                return null;
+                throw new EntityNotFoundException("Usuário", id);
 
             IEnumerable<TradeOperation> operations = _tradeOperationRepository.GetByUserId(user.Id).Where( op => tickers.Contains(op.Asset.Ticker) );
 
@@ -41,7 +41,7 @@ namespace TradeControl.Services
             var user = await _userRepository.GetByIdAsync(id);
 
             if (user == null)
-                return null;
+                throw new EntityNotFoundException("Usuário", id);
 
             UserPositionView userPositionView = new UserPositionView { UserId = user.Id, UserName = user.Name };
 

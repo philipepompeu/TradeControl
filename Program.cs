@@ -19,11 +19,9 @@ builder.Services.AddScoped<ITradeOperationRepository, TradeOperationRepository>(
 
 builder.Services.AddScoped<IAssetsService, AssetsService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<ITradeOperationService, TradeOperationService>();
 
 builder.Services.AddHttpClient<B3Service>();
-
-
 
 var app = builder.Build();
 
@@ -33,6 +31,8 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
     DataSeeder.Generate(dbContext);
 }
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

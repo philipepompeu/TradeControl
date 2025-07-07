@@ -17,26 +17,27 @@ namespace TradeControl.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Retorna a posição consolidada do usuário.
+        /// </summary>
+        /// <response code="200"> Retorna a posição consolidada do usuário </response>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(UserPositionView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]        
         public async Task<ActionResult<UserPositionView>> GetUserPositionAsync(Guid id)
         {
             UserPositionView userPosition = await _userService.GetUserPositionAsync(id);
-
-            if(userPosition == null)
-                return NotFound(id);
 
             return Ok(userPosition);// Retorna posição consolidada do usuário
             
         }
 
         [HttpGet("{id}/average-price")]
+        [ProducesResponseType(typeof(AssetPositionView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<AssetPositionView>>> GetAveragePrice(Guid id, [FromQuery] string[] tickers)
         {
-
             List<AssetPositionView> assets = await _userService.GetAveragePriceForTickers(id, tickers);
-
-            if(assets == null)
-                return NotFound(id);
 
             return Ok(assets);            
         }
