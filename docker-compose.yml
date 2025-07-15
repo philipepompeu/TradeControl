@@ -10,6 +10,17 @@
         volumes:
           - tradecontrolpg_data:/var/lib/postgresql/data
         ports:
-          - "5433:5432"    
+          - "5433:5432" 
+          
+    tradeapi:
+        build: ./
+        ports:
+            - "7068:8080" # formato HOST:CONTAINER
+        environment:
+          - ASPNETCORE_ENVIRONMENT=Production
+          - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=tradecontrol;Username=tradecontrol;Password=tradecontrol
+          - ASPNETCORE_URLS=http://0.0.0.0:8080
+        depends_on:
+         - postgres
 volumes:
   tradecontrolpg_data:
