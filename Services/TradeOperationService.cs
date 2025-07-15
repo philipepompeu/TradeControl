@@ -22,10 +22,10 @@ namespace TradeControl.Services
 
         public async Task<List<UserPositionView>> GetTopPositions()
         {
-            IEnumerable<UserPositionView> topPositions = await _repository.GetTopPositions();
+            List<UserPositionView> topPositions = await _repository.GetTopPositions();
 
 
-            return topPositions.ToList();
+            return topPositions;
         }
     }
 }

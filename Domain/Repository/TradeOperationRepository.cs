@@ -15,9 +15,32 @@ namespace TradeControl.Domain.Repository
             return this._dbSet.Include(t => t.Asset).Where(t => t.UserId == id).ToList();
         }
 
-        public async Task<IEnumerable<UserPositionView>> GetTopPositions()
+        public async Task<List<UserPositionView>> GetTopPositions()
         {
-            return await _dbSet.
+
+            var operacoes = await _dbSet
+                .GroupBy(op => new { op.UserId, op.AssetId })
+                .Select(grupo => new
+                {
+                    grupo.Key.UserId,
+                    TotalAtivo = grupo.Sum(o => o.Quantity) *
+                                 (grupo.Sum(o => o.Quantity * o.UnitPrice) / grupo.Sum(o => o.Quantity))
+                }).ToListAsync();
+
+            var resultado = operacoes
+                .GroupBy(x => x.UserId)
+                .Select(g => new UserPositionView
+                {
+                    UserId = g.Key,
+                    TotalPositionValue = g.Sum(x => x.TotalAtivo),
+                    Assets = new List<AssetPositionView>()
+                })
+                .OrderByDescending(g => g.TotalPositionValue)
+                .Take(10)
+                .ToList();
+
+
+            return resultado;
         }
 
         public async Task<decimal> SumBrokerageAsync() => await _dbSet.SumAsync(t => t.BrokerageFee);
