@@ -16,3 +16,6 @@ COPY --from=build /app/out ./
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "TradeControl.dll"]
+
+HEALTHCHECK --interval=45s --timeout=9s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
