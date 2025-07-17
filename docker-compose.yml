@@ -44,7 +44,10 @@ services:
             - GF_SECURITY_ADMIN_USER=admin
             - GF_SECURITY_ADMIN_PASSWORD=admin
         restart: always
+        volumes:
+          - grafana_data:/var/lib/grafana
         depends_on:
             - prometheus
 volumes:
   tradecontrolpg_data:
+  grafana_data:

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using TradeControl.Dtos;
 
 namespace TradeControl.Services{
@@ -13,6 +14,8 @@ namespace TradeControl.Services{
         }
         public async Task<AssetPriceView> ObterCotacaoAsync(string ticker)
         {
+            var stopwatch = Stopwatch.StartNew();
+
             try
             {
                 HttpResponseMessage response = await _httpClient.GetAsync($"https://b3api.vercel.app/api/Assets/{ticker}");
@@ -36,6 +39,11 @@ namespace TradeControl.Services{
                 Console.WriteLine($"Erro ao consultar B3: {ex.Message}");
 
                 return null; // Ou DTO indicando falha
+            }finally
+            {
+                stopwatch.Stop();
+                TradeMetrics.B3ApiAvgCallDuration.Record(stopwatch.Elapsed.TotalSeconds);
+                TradeMetrics.B3TotalApiCalls.Add(1);
             }
         }
     }
