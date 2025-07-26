@@ -1,4 +1,5 @@
-﻿using TradeControl;
+﻿using System.Text.Json;
+using TradeControl;
 
 public class ErrorHandlerMiddleware
 {
@@ -22,6 +23,17 @@ public class ErrorHandlerMiddleware
             var response = new { message = ex.Message };
 
             await context.Response.WriteAsJsonAsync(response);
+        }
+        catch (BadHttpRequestException ex) when (ex.Message.Contains("Request body too large"))
+        {
+            context.Response.StatusCode = StatusCodes.Status413PayloadTooLarge;
+            context.Response.ContentType = "application/json";
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(new
+            {
+                status = 413,
+                message = "O arquivo enviado excede o tamanho máximo permitido (5 MB)."
+            }));
         }
         catch (Exception ex)
         {

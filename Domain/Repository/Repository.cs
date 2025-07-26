@@ -19,9 +19,11 @@ namespace TradeControl.Domain.Repository
 
         public async Task AddAsync(TEntity entity) => await _dbSet.AddAsync(entity);
 
+        public async Task SaveChanges() => await _context.SaveChangesAsync();
+
         public void Update(TEntity entity) => _dbSet.Update(entity);
 
-        public void Delete(TEntity entity) => _dbSet.Remove(entity);
+        public void Delete(TEntity entity) => _dbSet.Remove(entity);        
     }
 
 }
