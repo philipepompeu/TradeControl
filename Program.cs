@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
-using OpenTelemetry;
-using OpenTelemetry.Metrics;
+using TradeControl.Configurations;
 using TradeControl.Controllers;
-using TradeControl.Domain.Repository;
 using TradeControl.Services;
 
 const int LENGTH_LIMIT_FILE = 5 * 1024 * 1024;
@@ -17,29 +15,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHealthChecks();
+builder.Services
+    .AddTelemetry()
+    .AddRepositories(builder.Configuration);
 
-builder.Services.AddOpenTelemetry().WithMetrics(
-    metrics =>
-    {
-        metrics
-            .AddAspNetCoreInstrumentation()
-            .AddRuntimeInstrumentation()
-            .AddPrometheusExporter()
-            .AddMeter("TradeControl.Metrics");
-    });
-
-
-builder.Services.AddDbContext<TradeControlDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAssetRepository, AssetRepository>();
-builder.Services.AddScoped<ITradeOperationRepository, TradeOperationRepository>();
-
-builder.Services.AddScoped<IAssetsService, AssetsService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITradeOperationService, TradeOperationService>();
-builder.Services.AddScoped<IFileDocumentRepository, FileDocumentRepository>();
+builder.Services.AddHostedService<ConsolidatePositionService>();
 
 builder.Services.AddHttpClient<B3Service>();
 
@@ -47,6 +27,11 @@ builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = LENGTH_LIMIT_FILE; // 5 MB
 });
+builder.Services.AddMemoryCache(options =>
+{
+    options.SizeLimit = 1024; 
+});
+
 
 var app = builder.Build();
 
