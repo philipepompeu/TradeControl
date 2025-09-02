@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeControl", "TradeControl.csproj", "{6F572F90-9A2F-4922-A024-11C0B4468499}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{293B1008-9C50-45F4-8AFD-D16FD95721E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeControl", "src\TradeControl\TradeControl.csproj", "{6F572F90-9A2F-4922-A024-11C0B4468499}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4EA4850F-CFC4-4C5D-8B92-7B64EB61F153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeControl.Tests", "test\TradeControl.Tests\TradeControl.Tests.csproj", "{F42FC796-BA17-4BB4-8BE0-BE75280F831C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,11 +21,18 @@ Global
 		{6F572F90-9A2F-4922-A024-11C0B4468499}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F572F90-9A2F-4922-A024-11C0B4468499}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F572F90-9A2F-4922-A024-11C0B4468499}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F42FC796-BA17-4BB4-8BE0-BE75280F831C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F42FC796-BA17-4BB4-8BE0-BE75280F831C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F42FC796-BA17-4BB4-8BE0-BE75280F831C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F42FC796-BA17-4BB4-8BE0-BE75280F831C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FC32E95-6F77-4276-8D03-8D0181572E11}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F42FC796-BA17-4BB4-8BE0-BE75280F831C} = {4EA4850F-CFC4-4C5D-8B92-7B64EB61F153}
 	EndGlobalSection
 EndGlobal
